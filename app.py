@@ -35,8 +35,33 @@ def get_artist_id(artist, token):
     params = {"q": artist, "type": "artist"}
     response = requests.get(url, headers=headers, params=params)
     result = json.loads(response.content)["artists"]["items"][0]["id"]
-    return result
+    
+    if len(result) == 0:
+        print("No artist found")
+        return None
+    else:
+        return result
+
+def get_artist_tracks(artist_id, token):
+    url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks"
+    headers = get_auth_header(token)
+    params = {"country": "US"}
+    response = requests.get(url, headers=headers, params=params)
+    result = json.loads(response.content)["tracks"]
+    
+    for idx, track in enumerate(result):
+        print(f"{idx+1}. {track['name']}")
+
+    if len(result) == 0:
+        print("No tracks found")
+        return None
+    else:
+        return result
+
+
 
 if __name__ == "__main__":
     token = get_token()
-    print(get_artist_id("The Beatles", token))
+    artist_id = get_artist_id("Still Woozy", token)
+    tracks = get_artist_tracks(artist_id, token)
+    #print(tracks)
