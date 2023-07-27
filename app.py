@@ -24,6 +24,19 @@ def get_token():
     response = requests.post(url, headers=headers, data=data)
     token = json.loads(response.content)["access_token"]
 
-    print(token) # for testing
+    return token
 
-get_token()
+def get_auth_header(token):
+    return {"Authorization": "Bearer " + token}
+
+def get_artist_id(artist, token):
+    url = "https://api.spotify.com/v1/search"
+    headers = get_auth_header(token)
+    params = {"q": artist, "type": "artist"}
+    response = requests.get(url, headers=headers, params=params)
+    result = json.loads(response.content)["artists"]["items"][0]["id"]
+    return result
+
+if __name__ == "__main__":
+    token = get_token()
+    print(get_artist_id("The Beatles", token))
