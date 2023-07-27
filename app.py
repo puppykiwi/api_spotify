@@ -45,7 +45,7 @@ def get_artist_id(artist, token):
 def get_artist_tracks(artist_id, token):
     url = f"https://api.spotify.com/v1/artists/{artist_id}/top-tracks"
     headers = get_auth_header(token)
-    params = {"country": "US"}
+    params = {"country": "KE"}
     response = requests.get(url, headers=headers, params=params)
     result = json.loads(response.content)["tracks"]
     
