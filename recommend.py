@@ -32,13 +32,7 @@ def get_token():
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
 
-def get_playlist_id(playlist, token):
-    url = "https://api.spotify.com/v1/search"
-    headers = get_auth_header(token)
-    params = {"q": playlist, "type": "playlist"}
-    response = requests.get(url, headers=headers, params=params)
-    result = json.loads(response.content)
-    return result
+
 
 def get_playlist_id(playlist_name, token):
     url = "https://api.spotify.com/v1/search"
@@ -55,17 +49,7 @@ def get_playlist_id(playlist_name, token):
 if __name__ == "__main__":
     print("Running recommend.py")
     token = get_token()
-    print("token: ",token)
-    id = get_playlist_id("S+Puppy", token)
-    print("id: ",id)
+    id = get_playlist_id(input("Enter playlist name: "), token)
     pl = Playlist(id, token)
-    if pl:
-        print("Playlist object created")
-    else:
-        print("Error creating Playlist object")
-    
-    result = pl.get_playlist_info()
-    print(result["id"])
-    print(result["name"])
-    print(result["description"])
-    pl.get_playlist_tracks()
+    result = pl.print_playlist_info()
+    #pl.get_playlist_tracks()

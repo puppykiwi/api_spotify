@@ -51,6 +51,7 @@ class Playlist:
     
     def print_playlist_info(self):
         result = self.get_playlist_info()
+        print("Playlist info:")
         print("id: ",result["id"])
         print(result["name"])
         print(result["description"])
@@ -61,8 +62,31 @@ class Playlist:
         url = self.base_url + "/tracks"
         headers = get_auth_header(self.token)
         result = self.get_request(url)
-        for idx in result["items"]:
-            print(idx["track"]["name"])
+
+        tracks_list = []
+        if "items" in result:
+            print("items found") #debug
+            for track_data in result["items"]:
+                #print(track_data) #debug
+                track_number = track_data.get("track_number", None)
+                track_name = track_data.get("name", None)
+                artists = track_data.get("artists", [])
+                artist_name = ", ".join([artist["name"] for artist in artists])
+
+                if track_number and track_name and artist_name:
+                    track_info = {
+                        "number": track_number,
+                        "track": track_name,
+                        "artist": artist_name,
+                    }
+                    tracks_list.append(track_info)
+        print(tracks_list) #debug
+        return tracks_list
+
+    def print_playlist_tracks(self):
+        result = self.get_playlist_tracks()
+        print("Playlist tracks:")
+        print(result)
 
     def get_request(self, custom_url=None):
         headers = get_auth_header(self.token)
@@ -74,7 +98,7 @@ class Playlist:
             print(f"Error: {e}")
             return None
 
-    
+
 if __name__ == "__main__":
     print("Running playlist.py")
     token = get_token()
