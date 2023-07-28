@@ -66,21 +66,19 @@ class Playlist:
         tracks_list = []
         if "items" in result:
             print("items found") #debug
-            for track_data in result["items"]:
+            for track in result["items"]:
                 #print(track_data) #debug
-                track_number = track_data.get("track_number", None)
-                track_name = track_data.get("name", None)
-                artists = track_data.get("artists", [])
+                track_name = track["track"]["name"]
+                artists = track["track"]["artists"]
                 artist_name = ", ".join([artist["name"] for artist in artists])
 
-                if track_number and track_name and artist_name:
+                if track_name and artist_name:
                     track_info = {
-                        "number": track_number,
                         "track": track_name,
                         "artist": artist_name,
                     }
+                    #print("track_info",track_info) #debug
                     tracks_list.append(track_info)
-        print(tracks_list) #debug
         return tracks_list
 
     def print_playlist_tracks(self):
