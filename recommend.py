@@ -41,9 +41,10 @@ def get_playlist_id(playlist, token):
     return result
 
 
+"""  Playlist class"""
+
 class Playlist:
     params = {"country": "KE"}
-    
     
     def __init__(self, playlist_id, token):
         self.playlist_id = playlist_id
