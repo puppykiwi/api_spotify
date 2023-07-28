@@ -9,48 +9,35 @@ import base64
 import json
 import random
 from playlist import Playlist
+from init import get_token, get_auth_header
 
-load_dotenv()
-id = os.getenv("CLIENT_ID")
-secret = os.getenv("CLIENT_SECRET")
-
-def get_token():
-    auth = base64.b64encode(bytes(id + ":" + secret, "utf-8")).decode("ascii")
-
-    url = "https://accounts.spotify.com/api/token"
-    headers = {
-        "Authorization": "Basic " + auth,
-        "Content-Type": "application/x-www-form-urlencoded"
-        }
-    data = {"grant_type": "client_credentials"}
-
-    response = requests.post(url, headers=headers, data=data)
-    token = json.loads(response.content)["access_token"]
-
-    return token
-
-def get_auth_header(token):
-    return {"Authorization": "Bearer " + token}
-
-
-
-def get_playlist_id(playlist_name, token):
+def get_playlist_id(playlist_name, username, token):
+    print("Getting playlist ID") # debug
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
-    params = {"q": playlist_name, "type": "playlist"}
+    #print("Headers: ", headers) # debug
+    params = {"q": f"{playlist_name} owner:{username}", "type": "playlist"}
     response = requests.get(url, headers=headers, params=params)
     result = json.loads(response.content)
+    #print("Result: ", result) # debug
     playlists = result.get("playlists", {}).get("items", [])
     if playlists:
-        return playlists[0]["id"]  # Return the first playlist ID found (assumes unique names)
+        id = playlists[0]["id"]
+        print("Playlist ID: ", id) # debug
+        return id 
     return None
 
 
+    
 if __name__ == "__main__":
     print("Running recommend.py")
     token = get_token()
     indie_id = "7eG04lBozqMlzgmpM1omp3"
-    #id = get_playlist_id(input("Enter playlist name: "), token)
-    pl = Playlist(indie_id, token)
-    result = pl.print_playlist_info()
-    pl.print_playlist_tracks()
+    #print("Token: ", token) # debug
+    #print("indie_id: ", indie_id) # debug
+    
+    get_playlist_id(input("Enter playlist name: "), "test", token)
+
+    #pl = Playlist(indie_id, token)
+    #result = pl.print_playlist_info()
+    #pl.print_playlist_tracks()
