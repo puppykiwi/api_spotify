@@ -51,7 +51,7 @@ class Playlist:
     
     def print_playlist_info(self):
         result = self.get_playlist_info()
-        print(result["id"])
+        print("id: ",result["id"])
         print(result["name"])
         print(result["description"])
         print(result["owner"]["display_name"])
@@ -74,49 +74,7 @@ class Playlist:
             print(f"Error: {e}")
             return None
 
-    @classmethod
-    def get_playlist_id(cls, token, playlist_name):
-        url = "https://api.spotify.com/v1/me/playlists"
-        headers = get_auth_header(get_token())
-        params = cls.params
-
-        response = requests.get(url, headers=headers, params=params)
-
-        if response.status_code == 200:
-            playlists_data = response.json()["items"]
-            for playlist in playlists_data:
-                if playlist["name"] == playlist_name:
-                    return playlist["id"]
-            return None
-        else:
-            # Handle API error
-            return None
-
-    @classmethod
-    def create_playlist_by_name(cls, token, playlist_name):
-        playlist_id = cls.get_playlist_id(token, playlist_name)
-        if playlist_id:
-            return cls(token, playlist_id)
-        else:
-            # Playlist with the given name not found, create a new one
-            url = "https://api.spotify.com/v1/me/playlists"
-            headers = {
-                "Authorization": f"Bearer {token}",
-                "Content-Type": "application/json",
-            }
-            data = {
-                "name": playlist_name,
-                "public": False, 
-            }
-
-            response = requests.post(url, headers=headers, json=data)
-
-            if response.status_code == 201:
-                playlist_data = response.json()
-                return cls(token, playlist_data["id"])
-            else:
-                return None
-
+    
 if __name__ == "__main__":
     print("Running playlist.py")
     token = get_token()
@@ -126,5 +84,5 @@ if __name__ == "__main__":
         print("Playlist object created")
     else:
         print("Error creating Playlist object")
-    id = pl.get_playlist_id(token, "sultry")
+    id = pl.get_playlist_id(token, "indie infusion")
     print(id)
