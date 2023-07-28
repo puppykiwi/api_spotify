@@ -49,7 +49,7 @@ def get_playlist_id(playlist_name, token):
 if __name__ == "__main__":
     print("Running recommend.py")
     token = get_token()
-    id = get_playlist_id(input("Enter playlist name: "), token)
+    id = get_playlist_id("Indie Infusion", token)
     pl = Playlist(id, token)
     result = pl.print_playlist_info()
-    #pl.get_playlist_tracks()
+    pl.get_playlist_tracks()
