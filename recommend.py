@@ -16,7 +16,7 @@ def get_playlist_id(playlist_name, username, token):
     url = "https://api.spotify.com/v1/search"
     headers = get_auth_header(token)
     #print("Headers: ", headers) # debug
-    params = {"q": f"{playlist_name} owner:{username}", "type": "playlist"}
+    params = {"q": f"playlist:{playlist_name} owner:{username}", "type": "playlist"}
     response = requests.get(url, headers=headers, params=params)
     result = json.loads(response.content)
     #print("Result: ", result) # debug
@@ -36,8 +36,8 @@ if __name__ == "__main__":
     #print("Token: ", token) # debug
     #print("indie_id: ", indie_id) # debug
     
-    get_playlist_id(input("Enter playlist name: "), "test", token)
+    #get_playlist_id(input("Enter playlist name: "), "test", token)
 
-    #pl = Playlist(indie_id, token)
-    #result = pl.print_playlist_info()
-    #pl.print_playlist_tracks()
+    pl = Playlist(indie_id, token)
+    pl.print_playlist_info()
+    pl.print_playlist_tracks()
