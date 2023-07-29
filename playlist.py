@@ -25,12 +25,12 @@ class Playlist:
     
     def print_playlist_info(self):
         result = self.get_playlist_info()
-        print("Playlist info:")
+        print("\nPlaylist info:")
         print("id: ",result["id"])
-        print(result["name"])
-        print(result["description"])
-        print(result["owner"]["display_name"])
-        print(result["tracks"]["total"])
+        print("name: ",result["name"])
+        print("descr: ",result["description"])
+        print("owner: ",result["owner"]["display_name"])
+        print("No. ",result["tracks"]["total"])
 
     def get_playlist_tracks(self):
         url = self.base_url + "/tracks"
@@ -39,7 +39,7 @@ class Playlist:
 
         tracks_list = []
         if "items" in result:
-            print("items found") #debug
+            # print("items found") #debug
             for track in result["items"]:
                 #print(track_data) #debug
                 track_name = track["track"]["name"]
@@ -57,8 +57,9 @@ class Playlist:
 
     def print_playlist_tracks(self):
         result = self.get_playlist_tracks()
-        print("Playlist tracks:")
-        print(result)
+        print("\nPlaylist tracks:")
+        for index, value in enumerate(result):
+            print(f"{index+1}. {value['track']} by {value['artist']}")
 
     def get_request(self, custom_url=None):
         headers = get_auth_header(self.token)
